@@ -13,12 +13,12 @@ function App() {
   const [registerPassword, setRegisterPassword] = useState("")
   const [loginEmail, setLoginEmail] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
+  
+  const [user, setUser] = useState({})
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   })
-
-  const [user, setUser] = useState({})
 
   const register = async () => {
     try {
@@ -27,7 +27,7 @@ function App() {
         registerEmail,
         registerPassword
       );
-      console.log(user)
+      console.log(user);
     } catch (error) {
       console.log(error.message);
     }
@@ -40,7 +40,7 @@ function App() {
         loginEmail,
         loginPassword
       );
-      console.log(user)
+      console.log(user);
     } catch (error) {
       console.log(error.message);
     }
@@ -83,6 +83,7 @@ function App() {
             setLoginPassword(event.target.value)
           }}
         />
+        
         <button onclick={login}>Sign In</button>
       </div>
 
