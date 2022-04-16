@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { 
+  createUserWithEmailAndPassword, 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword, 
+  signOut, 
+} from "firebase/auth";
 import './App.css';
 import { auth } from "./firebase-config";
 
@@ -9,6 +14,11 @@ function App() {
   const [loginEmail, setLoginEmail] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
 
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  })
+
+  const [user, setUser] = useState({})
 
   const register = async () => {
     try {
@@ -24,11 +34,20 @@ function App() {
   };
 
   const login = async () => {
-
+    try {
+      const user = await signInWithEmailAndPassword(
+        auth,
+        loginEmail,
+        loginPassword
+      );
+      console.log(user)
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   const logout = async () => {
-
+    await signOut(auth);
   }
 
 
@@ -64,12 +83,15 @@ function App() {
             setLoginPassword(event.target.value)
           }}
         />
-        <button>Sign In</button>
+        <button onclick={login}>Sign In</button>
       </div>
 
         <h4>User Logged In:</h4>
+        {user?.email}
            
-        <button>Sign Out</button>
+        <button onclick={logout}>
+          Sign Out
+        </button>
     </div>
     
   );
